@@ -72,7 +72,7 @@
 ## GNU/Linux
 
 
-我们建议你使用的os开发系统是GNU/Linux。使用该操作系统时，许多GNU开发工具是已近存在的，若没有，你可以使用包管理器（apt,rpm,portage,pacman,apk,etc）去安装你所需的工具。同样，需要制作跨编译器（cross-compiler），以免在开发系统的允许文件中链接。
+我们建议你使用的os开发系统是GNU/Linux。使用该操作系统时，许多GNU开发工具是已近存在的，若没有，你可以使用包管理器（apt,rpm,portage,pacman,apk,etc）去安装你所需的工具。同样，需要制作交叉编译器（cross-compiler），以在开发系统的时候允许你编译任意平台的内容
 
 常用的编辑器有 Vim emas,kdevelop,komodo编辑等等（笔者喜欢vscode），有人喜欢轻量级编辑器，而不是ide，比如Gedit,Geany和scite。许多人喜欢Midnight Commander。它具有一个文本ui和一个内置编辑器（McEdit），因此十分轻巧，让你快速使用
 
