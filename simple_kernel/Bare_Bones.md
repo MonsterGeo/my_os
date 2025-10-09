@@ -466,3 +466,70 @@ qemu-system-i386 -cdrom myos.iso
 ```shell
 qemu-system-i386 -kernel myos.bin
 ```
+
+
+## 更进一步
+
+恭喜，你已经能运行这款全新的操作系统了。当然，这是否只是一个开始，取决于你对它的兴趣程度。以下是一些帮助你开启后续使用的建议：
+
+### 为终端添加换行支持
+
+要处理终端中的换行符（\n），你需要在 terminal_putchar 函数中添加对换行符的判断逻辑。当检测到 \n 时，不需要向 VGA 缓冲区写入任何字符，而是直接调整终端的行（terminal_row）和列
+
+```shell
+void terminal_putchar(char c) 
+{
+	// 在当前光标位置输出字符
+
+	if(c == '\n')
+	{
+		terminal_column = 0;
+		terminal_row = ++;
+	}
+	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+	
+	// 更新光标位置：列号+1；若达到最大列数（80），则换行
+	if (++terminal_column == VGA_WIDTH) {
+		terminal_column = 0;  // 列号重置为0
+		if (++terminal_row == VGA_HEIGHT)  // 行号+1；若达到最大行数（25）
+			terminal_row = 0;  // 行号重置为0（循环覆盖，无滚动）
+	}
+}
+```
+
+### 实现终端滚动
+
+若终端内容已填满，它只会回到屏幕顶部（继续输出）。这在正常使用中是不可接受的。相反，终端应将所有行向上移动一行并丢弃最顶部的行，同时在底部保留一行空白行，以备输入字符。请实现此功能。
+
+```c
+
+static void terminal_scroll()
+{
+	//将n-1行的内容复制到n-2行上即可，其中n是最大的行数
+	for(size_t y = 1; y< VGA_HEIGHT; y++)
+	{
+		for(size_t x = 0; x< VGA_WIDTH; x++)
+		{
+			size_t src_idx = y * VGA_WIDTH +x;
+			size_t dest_idx = (y-1) * VGA_WIDTH +x;
+			terminal_buffer[dest_idx] = terminal_buffer[src_idx]
+		}
+	}
+}
+
+```
+
+然后只需要清空最底部的新行，即VGA_HEIGHT -1行即可。
+
+```c
+size_t last_row_idx = (VGA_HEIGHT -1) * VGA_WIDTH
+
+for(size_t x = 0; x< VGA_WITDT;x++)
+{
+	terminal_buffer[last_row_idx+x] = vga_entry(' ', terminal_color);
+}
+```
+
+这样就实现了一个清屏函数
+
+本节课到此结束
