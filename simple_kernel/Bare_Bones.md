@@ -532,4 +532,11 @@ for(size_t x = 0; x< VGA_WITDT;x++)
 
 这样就实现了一个清屏函数
 
+### 调用全局函数
+
+主要文章:[调用全局构造函数](https://github.com/MonsterGeo/my_os/blob/main/simple_kernel/more_and_more/Calling_Global_Constructors.md)
+
+
+本教程展示了一个为 C 和 C++ 内核创建最小运行环境的简单示例。但遗憾的是，你的环境尚未完全配置妥当。例如，包含全局对象的 C++ 代码中，这些对象的构造函数不会被调用 —— 因为你从未执行过调用它们的操作。
+编译器通过crt*.o系列目标文件，实现了一种在程序初始化阶段执行特定任务的特殊机制，即便对于 C 语言开发者而言，这种机制也可能很有价值。如果你能正确组合这些crt*.o文件，就会生成一个_init函数，该函数会触发所有程序初始化任务。之后，你的boot.o目标文件可以在调用kernel_main之前调用_init。
 本节课到此结束
