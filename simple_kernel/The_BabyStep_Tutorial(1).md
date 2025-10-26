@@ -370,9 +370,9 @@ keyhandler: ;处理程序
    out 0x61,al ;将修改的状态写回61
    xchg ah,al  ; 交换AH和al的值
    out 0x61,al ; 将原始状态写回61端口
-   mov al,0x20 ;将Al赋值为20
+   mov al,0x20 ;中断结束命令
 
-   out 0x20,al ;EOL命令写入8259中断控制器
+   out 0x20,al ;发送到主中断控制器端口0x20告知中断处理完毕
    and bl,0x80 ;判断原始扫描码是否释放，释放时按第七位为1
    jnz done    ;非零则跳转到done，否则继续打印
    mov ax,[port60]
